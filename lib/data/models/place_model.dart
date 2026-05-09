@@ -10,12 +10,13 @@ class PlaceModel extends Place {
   });
 
   factory PlaceModel.fromJson(Map<String, dynamic> json) {
+    final id = json['id'] as int;
     return PlaceModel(
-      id: json['id'] as int,
+      id: id,
       albumId: json['albumId'] as int,
       title: json['title'] as String,
-      url: json['url'] as String,
-      thumbnailUrl: json['thumbnailUrl'] as String,
+      url: 'https://picsum.photos/seed/$id/600/400',
+      thumbnailUrl: 'https://picsum.photos/seed/$id/150/150',
     );
   }
 

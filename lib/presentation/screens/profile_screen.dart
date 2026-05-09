@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/constants/app_colors.dart';
@@ -14,10 +15,27 @@ class ProfileScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 48,
             backgroundColor: AppColors.primaryPurple,
-            child: Icon(Icons.person, size: 48, color: Colors.white),
+            child: ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: 'https://i.pravatar.cc/300?img=12',
+                width: 96,
+                height: 96,
+                fit: BoxFit.cover,
+                placeholder: (_, __) => const Icon(
+                  Icons.person,
+                  size: 48,
+                  color: Colors.white,
+                ),
+                errorWidget: (_, __, ___) => const Icon(
+                  Icons.person,
+                  size: 48,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           Text(
