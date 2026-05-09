@@ -35,7 +35,9 @@ class PlacesRepositoryImpl implements PlacesRepository {
             await _remote.fetchPhotos(start: start, limit: limit);
         await _local.mergePlaces(models);
         return models.map((m) => m.toEntity()).toList();
-      } catch (_) {
+      } catch (e, st) {
+        // ignore: avoid_print
+        print('[PlacesRepo] fetch error: $e\n$st');
         final cached = await _local.readCachedPlaces();
         if (cached.isNotEmpty) {
           final slice = cached.skip(start).take(limit).toList();

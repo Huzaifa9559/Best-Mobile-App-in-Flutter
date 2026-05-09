@@ -61,7 +61,7 @@ class PlacesNotifier extends AsyncNotifier<PlacesViewState> {
   }
 
   Future<void> refresh() async {
-    final prevEpoch = state.value?.epoch ?? -1;
+    final prevEpoch = state.valueOrNull?.epoch ?? -1;
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final getPlaces = ref.read(getPlacesUseCaseProvider);
@@ -81,7 +81,7 @@ class PlacesNotifier extends AsyncNotifier<PlacesViewState> {
   }
 
   Future<void> loadMore() async {
-    final current = state.value;
+    final current = state.valueOrNull;
     if (current == null || !current.hasMore || current.loadingMore) return;
 
     state = AsyncData(current.copyWith(loadingMore: true));

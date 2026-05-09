@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -29,8 +30,8 @@ final appBoxProvider = Provider<Box<dynamic>>((ref) {
 final dioProvider = Provider<Dio>((ref) {
   return Dio(
     BaseOptions(
-      connectTimeout: const Duration(seconds: 20),
-      receiveTimeout: const Duration(seconds: 20),
+      connectTimeout: kIsWeb ? null : const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 60),
     ),
   );
 });

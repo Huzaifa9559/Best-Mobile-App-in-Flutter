@@ -11,6 +11,7 @@ import '../providers/filtered_places_provider.dart';
 import '../providers/place_list_filter.dart';
 import '../providers/places_notifier.dart';
 import '../providers/search_filter_providers.dart';
+import '../providers/theme_mode_provider.dart';
 import '../widgets/animated_places_list.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/offline_banner.dart';
@@ -60,8 +61,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final filter = ref.watch(placeListFilterProvider);
     final query = ref.watch(searchQueryProvider);
     final sort = ref.watch(searchSortProvider);
-    final epoch = placesAsync.value?.epoch ?? 0;
+    final epoch = placesAsync.valueOrNull?.epoch ?? 0;
     final listIdentity = '$epoch-${filter.name}-$query-${sort.name}';
+    final activeFilterCount = (sort != PlaceSortMode.recommended ? 1 : 0) +
+        (filter != PlaceListFilter.all ? 1 : 0) +
+        (ref.watch(regionFilterProvider) != null ? 1 : 0);
 
     return OfflineBannerHost(
       child: Scaffold(
@@ -75,6 +79,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           title: const Text(AppStrings.explorePlaces),
           actions: [
+            IconButton(
+              tooltip: 'Toggle theme',
+              onPressed: () =>
+                  ref.read(themeModeProvider.notifier).toggle(),
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: Icon(
+                  ref.watch(themeModeProvider) == ThemeMode.dark
+                      ? Icons.light_mode_outlined
+                      : Icons.dark_mode_outlined,
+                  key: ValueKey(ref.watch(themeModeProvider)),
+                ),
+              ),
+            ),
             IconButton(
               tooltip: 'Notifications',
               onPressed: () {
@@ -127,8 +145,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 },
                               ),
                             IconButton(
-                              icon: const Icon(Icons.tune_rounded),
-                              onPressed: () => context.pushNamed('search'),
+                              icon: Badge(
+                                isLabelVisible: activeFilterCount > 0,
+                                label: Text('$activeFilterCount'),
+                                backgroundColor:
+                                    AppColors.primaryPurple,
+                                child: const Icon(Icons.tune_rounded),
+                              ),
+                              onPressed: () =>
+                                  context.pushNamed('search'),
                             ),
                           ],
                         ),

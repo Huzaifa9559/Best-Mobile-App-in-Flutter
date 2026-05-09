@@ -7,6 +7,7 @@ import '../../core/constants/app_colors.dart';
 import '../../domain/entities/place.dart';
 import '../../domain/entities/weather.dart';
 import '../providers/favorites_notifier.dart';
+import '../providers/map_place_provider.dart';
 import '../providers/weather_provider.dart';
 
 class DetailScreen extends ConsumerStatefulWidget {
@@ -168,9 +169,15 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
                       const SizedBox(height: 24),
                       SizedBox(
                         width: double.infinity,
-                        child: FilledButton(
-                          onPressed: () => context.go('/map'),
-                          child: const Text('View on Map'),
+                        child: FilledButton.icon(
+                          onPressed: () {
+                            ref
+                                .read(focusedMapPlaceIdProvider.notifier)
+                                .state = place.id;
+                            context.go('/map');
+                          },
+                          icon: const Icon(Icons.map_outlined, size: 18),
+                          label: const Text('View on Map'),
                         ),
                       ),
                     ],

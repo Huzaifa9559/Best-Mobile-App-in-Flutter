@@ -116,8 +116,9 @@ class AppDrawer extends ConsumerWidget {
                   value: isDark,
                   activeColor: AppColors.primaryPurple,
                   onChanged: (v) {
-                    ref.read(themeModeProvider.notifier).state =
-                        v ? ThemeMode.dark : ThemeMode.light;
+                    ref.read(themeModeProvider.notifier).setMode(
+                          v ? ThemeMode.dark : ThemeMode.light,
+                        );
                   },
                 ),
               ],
